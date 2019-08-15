@@ -15,7 +15,7 @@ class Controller(object):
         ki=0.1
         kd=0
         mn=0
-        mx=0.5
+        mx=0.2
         self.throttle_controller=PID(kp, ki, kd, mn, mx)
         tau=0.5
         ts=0.02
@@ -42,13 +42,13 @@ class Controller(object):
         self.last_vel=current_vel
         current_time=rospy.get_time()
         sample_time=current_time-self.last_time
-        vel_decel=vel_error/sample_time
+        #vel_decel=vel_error/sample_time
         self.last_time=current_time
 
         throttle=self.throttle_controller.step(vel_error, sample_time)
         brake=0
 
-        if linear_vel==0 and current_vel<1.5 :
+        if linear_vel==0 and current_vel<0.1 :
             throttle=0
             brake=700       # update to hold the vehicle at stop
         elif throttle<0.1 and vel_error<0 :
